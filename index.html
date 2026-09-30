@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth scroll-pt-24">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurante NIKO | Pizzas Artesanales & Pastas Frescas</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FAF8F5;
+            color: #1C1917;
+        }
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Personalización de barra de desplazamiento */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F5F5F4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C2410C;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9A3412;
+        }
+        /* Header con efecto cristal borroso */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+        }
+        /* Animaciones para alertas Toast */
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100%) scale(0.92);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .toast-animate-in {
+            animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .toast-animate-out {
+            animation: fadeOut 0.25s ease-out forwards;
+        }
+        /* Animación suave para insignias */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen antialiased selection:bg-rose-600 selection:text-white">
+
+    <!-- CONTENEDOR DE NOTIFICACIONES TOAST -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none max-w-sm w-full px-4"></div>
+
+    <!-- FRANJA SUPERIOR INFORMATIVA Y ESTADO EN VIVO -->
+    <div class="bg-stone-900 text-stone-200 border-b border-stone-800 text-xs py-2.5 px-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+            <div class="flex items-center gap-3">
+                <span id="live-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>ABIERTO AHORA</span>
+                </span>
+                <span class="hidden md:inline text-stone-400">|</span>
+                <span class="hidden md:inline"><i class="fa-solid fa-location-dot text-amber-500 mr-1"></i> Av. San Martín 1420, Ciudad Gourmet</span>
+            </div>
+            <div class="flex items-center gap-4 text-stone-300 font-medium">
+                <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-0.5 rounded-md text-[11px] font-mono">
+                    🎟️ Usa el cupón <strong class="text-amber-300 font-bold">NIKOFIRST</strong> (10% OFF)
+                </span>
+                <a href="https://wa.me/541155559090" target="_blank" class="hover:text-amber-400 transition-colors flex items-center gap-1">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+                    <span class="hidden sm:inline">+54 11 5555-9090</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER Y NAVEGACIÓN PRINCIPAL -->
+    <header class="sticky top-[37px] left-0 right-0 z-40 glass-header border-b border-stone-200/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- LOGO NIKO -->
+            <a href="#inicio" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose-600 via-rose-700 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-rose-600/25 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-pizza-slice text-xl transform -rotate-12 group-hover:rotate-0 transition-transform"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-serif-title font-extrabold text-2xl tracking-tight text-stone-900 group-hover:text-rose-600 transition-colors">NIKO</span>
+                    <span class="text-[10px] tracking-widest text-amber-700 uppercase font-bold -mt-1">Pizzeria & Trattoria</span>
+                </div>
+            </a>
+
+            <!-- NAVEGACIÓN DESKTOP -->
+            <nav class="hidden lg:flex items-center gap-8 font-medium text-stone-700 text-sm">
+                <a href="#inicio" class="hover:text-rose-600 transition-colors py-2 border-b-2 border-transparent hover:border-rose-600">Inicio</a>
+                <a href="#menu" class="hover:text-rose-600 transition-colors py-2 border-b-2 border-transparent hover:border-rose-600">Menú</a>
+                <a href="#secreto" class="hover:text-rose-600 transition-colors py-2 border-b-2 border-transparent hover:border-rose-600">El Secreto NIKO</a>
+                <a href="#reservas" class="hover:text-rose-600 transition-colors py-2 border-b-2 border-transparent hover:border-rose-600">Reservar Mesa</a>
+                <a href="#contacto" class="hover:text-rose-600 transition-colors py-2 border-b-2 border-transparent hover:border-rose-600">Contacto</a>
+            </nav>
+
+            <!-- BOTONES DE ACCIÓN DESKTOP -->
+            <div class="hidden sm:flex items-center gap-3">
+                <button onclick="toggleCartDrawer(true)" class="relative p-3 rounded-xl bg-stone-100 hover:bg-rose-50 text-stone-800 hover:text-rose-600 transition-all flex items-center justify-center border border-stone-200/80" aria-label="Ver Carrito">
+                    <i class="fa-solid fa-cart-shopping text-base"></i>
+                    <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[11px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md">0</span>
+                </button>
+
+                <a href="#reservas" class="bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white font-bold px-5 py-2.5 rounded-xl shadow-md shadow-rose-600/20 transition-all transform active:scale-95 text-xs sm:text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Reservar Mesa
+                </a>
+            </div>
+
+            <!-- BOTÓN MENÚ MÓVIL HAMBURGUESA -->
+            <div class="flex items-center gap-2.5 lg:hidden">
+                <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-xl bg-stone-100 text-stone-800 border border-stone-200" aria-label="Ver Carrito Móvil">
+                    <i class="fa-solid fa-cart-shopping text-base"></i>
+                    <span id="cart-badge-mobile" class="absolute -top-1 -right-1 bg-rose-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu(true)" class="p-2.5 rounded-xl bg-stone-100 text-stone-800 hover:bg-stone-200 focus:outline-none border border-stone-200" aria-label="Abrir Menú Móvil">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MENÚ DESPLEGABLE MÓVIL -->
+    <div id="mobile-menu-backdrop" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 hidden opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleMobileMenu(false)">
+        <div id="mobile-menu-panel" class="fixed top-0 right-0 h-full w-4/5 max-w-xs bg-white shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto" onclick="event.stopPropagation()">
+            <div>
+                <div class="flex items-center justify-between pb-6 border-b border-stone-100">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center">
+                            <i class="fa-solid fa-pizza-slice text-lg"></i>
+                        </div>
+                        <span class="font-serif-title font-bold text-xl text-stone-900">Restaurante NIKO</span>
+                    </div>
+                    <button onclick="toggleMobileMenu(false)" class="p-2 text-stone-400 hover:text-stone-800 rounded-lg">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+                <nav class="mt-6 flex flex-col gap-3 font-medium text-stone-700 text-sm">
+                    <a href="#inicio" onclick="toggleMobileMenu(false)" class="p-3 rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-colors flex items-center gap-3">
+                        <i class="fa-solid fa-house w-5 text-rose-600"></i> Inicio
+                    </a>
+                    <a href="#menu" onclick="toggleMobileMenu(false)" class="p-3 rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-colors flex items-center gap-3">
+                        <i class="fa-solid fa-utensils w-5 text-rose-600"></i> Menú de Platos
+                    </a>
+                    <a href="#secreto" onclick="toggleMobileMenu(false)" class="p-3 rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-colors flex items-center gap-3">
+                        <i class="fa-solid fa-fire-flame-curved w-5 text-rose-600"></i> El Secreto NIKO
+                    </a>
+                    <a href="#reservas" onclick="toggleMobileMenu(false)" class="p-3 rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-colors flex items-center gap-3">
+                        <i class="fa-solid fa-calendar-check w-5 text-rose-600"></i> Reservar Mesa
+                    </a>
+                    <a href="#contacto" onclick="toggleMobileMenu(false)" class="p-3 rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-colors flex items-center gap-3">
+                        <i class="fa-solid fa-location-dot w-5 text-rose-600"></i> Contacto
+                    </a>
+                </nav>
+            </div>
+            <div class="pt-6 border-t border-stone-100 space-y-3">
+                <a href="#menu" onclick="toggleMobileMenu(false)" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-md text-sm">
+                    <i class="fa-solid fa-pizza-slice"></i> Pedir en Línea
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN HERO -->
+    <section id="inicio" class="relative py-20 lg:py-28 overflow-hidden bg-gradient-to-b from-stone-900 via-stone-900 to-stone-950 text-white">
+        <div class="absolute inset-0 z-0 opacity-30">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1920&q=80" alt="Horno de Barro NIKO" class="w-full h-full object-cover">
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold tracking-widest uppercase">
+                        <i class="fa-solid fa-fire text-rose-500"></i> Auténtica Pizza Napolitana & Pastas Artesanales
+                    </div>
+                    
+                    <h1 class="font-serif-title text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+                        NIKO: Donde la verdadera pizza <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-rose-500">cobra vida</span>.
+                    </h1>
+                    
+                    <p class="text-stone-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        Fermentación artesanal de 48 horas, ingredientes seleccionados traídos directamente de Italia y la calidez de nuestro horno de barro a 450°C.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#menu" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 via-rose-700 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white font-extrabold px-8 py-4 rounded-2xl shadow-xl shadow-rose-600/30 hover:shadow-2xl transition-all transform active:scale-95 text-center flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-utensils"></i> Explorar Menú
+                        </a>
+                        <a href="#reservas" class="w-full sm:w-auto bg-stone-800/80 hover:bg-stone-800 text-stone-200 border border-stone-700 font-bold px-8 py-4 rounded-2xl shadow-md transition-all text-center flex items-center justify-center gap-3 backdrop-blur-md">
+                            <i class="fa-solid fa-calendar-days text-amber-400"></i> Reservar Mesa
+                        </a>
+                    </div>
+
+                    <div class="pt-8 border-t border-stone-800 grid grid-cols-3 gap-4 text-center lg:text-left max-w-xl mx-auto lg:mx-0">
+                        <div class="flex flex-col items-center lg:items-start">
+                            <span class="font-extrabold text-xl sm:text-2xl text-amber-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-clock text-rose-500 text-base"></i> 48 Hs
+                            </span>
+                            <span class="text-xs text-stone-400 font-medium">Masa Madre</span>
+                        </div>
+                        <div class="flex flex-col items-center lg:items-start">
+                            <span class="font-extrabold text-xl sm:text-2xl text-amber-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-temperature-arrow-up text-rose-500 text-base"></i> 450°C
+                            </span>
+                            <span class="text-xs text-stone-400 font-medium">Horno de Barro</span>
+                        </div>
+                        <div class="flex flex-col items-center lg:items-start">
+                            <span class="font-extrabold text-xl sm:text-2xl text-amber-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-star text-amber-400 text-base"></i> 4.9 ★
+                            </span>
+                            <span class="text-xs text-stone-400 font-medium">+15,000 Clientes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-full max-w-md aspect-square rounded-3xl overflow-hidden border-4 border-stone-800 shadow-2xl group">
+                        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=1000&q=80" alt="Pizza Napolitana NIKO" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-transparent opacity-80"></div>
+                        
+                        <div class="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-stone-900/90 backdrop-blur-md border border-stone-700 flex items-center justify-between">
+                            <div>
+                                <span class="text-amber-400 font-bold text-xs uppercase tracking-wider">Estrella de la casa</span>
+                                <h3 class="font-serif-title font-bold text-white text-lg">Pizza Burrata & Jamón Crudo</h3>
+                                <p class="text-stone-400 text-xs">$18.90 • Masa Madre</p>
+                            </div>
+                            <button onclick="addDirectToCart(4)" class="w-10 h-10 rounded-xl bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+                                <i class="fa-solid fa-plus font-bold"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="absolute -top-4 -left-2 bg-rose-600 text-white px-4 py-2 rounded-2xl shadow-xl font-bold text-xs flex items-center gap-2 animate-float">
+                        <i class="fa-solid fa-award text-amber-300 text-sm"></i> #1 En Pizzas Artesanales
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN MENÚ DE PLATOS -->
+    <section id="menu" class="py-20 bg-stone-100/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-rose-600 font-bold uppercase tracking-widest text-xs">Apetitoso & Variado</span>
+                <h2 class="font-serif-title text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 mt-1">El Menú de NIKO</h2>
+                <p class="text-stone-600 text-sm sm:text-base mt-3">Selecciona tus platos favoritos para pedir a domicilio o consulta la carta para tu próxima visita.</p>
+            </div>
+
+            <!-- BUSCADOR Y PESTAÑAS DE FILTRADO -->
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-10">
+                <div class="relative w-full md:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                    <input type="text" id="menu-search-input" onkeyup="handleSearch()" placeholder="Buscar pizza, pasta, postre..." class="w-full pl-11 pr-10 py-3 bg-white border border-stone-200 rounded-2xl shadow-sm text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none transition-all">
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="w-full md:w-auto overflow-x-auto pb-2 md:pb-0 flex items-center gap-2 scrollbar-none">
+                    <button onclick="filterCategory('todos')" class="category-btn active px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-rose-600 text-white shadow-md shadow-rose-600/20" data-category="todos">
+                        <i class="fa-solid fa-border-all mr-1.5"></i> Todos
+                    </button>
+                    <button onclick="filterCategory('pizzas')" class="category-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-white text-stone-700 hover:bg-stone-200/80 border border-stone-200/80" data-category="pizzas">
+                        <i class="fa-solid fa-pizza-slice text-amber-600 mr-1.5"></i> Pizzas
+                    </button>
+                    <button onclick="filterCategory('pastas')" class="category-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-white text-stone-700 hover:bg-stone-200/80 border border-stone-200/80" data-category="pastas">
+                        <i class="fa-solid fa-bowl-food text-amber-600 mr-1.5"></i> Pastas Frescas
+                    </button>
+                    <button onclick="filterCategory('clasicos')" class="category-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-white text-stone-700 hover:bg-stone-200/80 border border-stone-200/80" data-category="clasicos">
+                        <i class="fa-solid fa-drumstick-bite text-amber-600 mr-1.5"></i> Los Clásicos
+                    </button>
+                    <button onclick="filterCategory('postres')" class="category-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-white text-stone-700 hover:bg-stone-200/80 border border-stone-200/80" data-category="postres">
+                        <i class="fa-solid fa-ice-cream text-amber-600 mr-1.5"></i> Postres & Bebidas
+                    </button>
+                </div>
+            </div>
+
+            <!-- GRID DINÁMICO -->
+            <div id="dishes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Se puebla mediante JS -->
+            </div>
+
+        </div>
+    </section>
+
+    <!-- MODAL DE PERSONALIZACIÓN -->
+    <div id="custom-modal-backdrop" class="fixed inset-0 bg-stone-900/65 backdrop-blur-sm z-50 hidden opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4" onclick="closeCustomizeModal()">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300 pointer-events-auto border border-stone-100" onclick="event.stopPropagation()">
+            
+            <div class="relative h-60 bg-stone-100 overflow-hidden">
+                <img id="modal-dish-img" src="" alt="" class="w-full h-full object-cover">
+                <button onclick="closeCustomizeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 text-white hover:bg-black/80 flex items-center justify-center transition-colors shadow-md">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div id="modal-dish-badge" class="absolute bottom-4 left-4"></div>
+            </div>
+
+            <div class="p-6 space-y-5">
+                <div>
+                    <div class="flex justify-between items-start">
+                        <h3 id="modal-dish-title" class="font-serif-title font-bold text-2xl text-stone-900"></h3>
+                        <span id="modal-dish-price" class="font-bold text-xl text-rose-600"></span>
+                    </div>
+                    <p id="modal-dish-desc" class="text-stone-600 text-sm mt-2 leading-relaxed"></p>
+                </div>
+
+                <div class="space-y-3 pt-3 border-t border-stone-100">
+                    <label class="block font-semibold text-stone-900 text-sm">Personaliza tu pedido:</label>
+                    <div id="modal-dish-options" class="space-y-2"></div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="modal-dish-notes" class="block font-semibold text-stone-900 text-sm">Notas para la cocina:</label>
+                    <input type="text" id="modal-dish-notes" placeholder="Ej. Masa bien crocante, poco queso, sin orégano..." class="w-full px-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
+                </div>
+
+                <div class="pt-4 border-t border-stone-100 flex items-center gap-4">
+                    <div class="flex items-center border border-stone-200 rounded-xl bg-stone-50 p-1">
+                        <button onclick="adjustModalQty(-1)" class="w-9 h-9 rounded-lg bg-white shadow-sm flex items-center justify-center text-stone-700 hover:bg-stone-100 font-bold">-</button>
+                        <span id="modal-dish-qty" class="w-10 text-center font-bold text-stone-900 text-sm">1</span>
+                        <button onclick="adjustModalQty(1)" class="w-9 h-9 rounded-lg bg-white shadow-sm flex items-center justify-center text-stone-700 hover:bg-stone-100 font-bold">+</button>
+                    </div>
+
+                    <button id="modal-add-btn" onclick="confirmCustomizeAdd()" class="flex-1 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-rose-600/20 transition-all flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-cart-plus"></i>
+                        <span>Confirmar y Agregar</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PANEL LATERAL DEL CARRITO -->
+    <div id="cart-drawer-backdrop" class="fixed inset-0 bg-stone-900/65 backdrop-blur-sm z-50 hidden opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleCartDrawer(false)">
+        <div id="cart-drawer-panel" class="fixed top-0 right-0 h-full w-full sm:w-96 max-w-full bg-white shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto" onclick="event.stopPropagation()">
+            
+            <div class="p-5 border-b border-stone-100 flex items-center justify-between bg-stone-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-cart-shopping text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif-title font-bold text-lg text-stone-900">Tu Pedido NIKO</h3>
+                        <p class="text-[11px] text-stone-500">Revisa tus ítems antes de enviar</p>
+                    </div>
+                </div>
+                <button onclick="toggleCartDrawer(false)" class="p-2 text-stone-400 hover:text-stone-800 rounded-lg">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="p-4 bg-amber-500/10 border-b border-amber-500/20 flex gap-2">
+                <button id="service-delivery-btn" onclick="setServiceType('delivery')" class="flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-rose-600 text-white shadow-sm flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-motorcycle"></i> Delivery ($600)
+                </button>
+                <button id="service-pickup-btn" onclick="setServiceType('pickup')" class="flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white text-stone-700 hover:bg-stone-200 border border-stone-200 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-store"></i> Retiro ($0)
+                </button>
+            </div>
+
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4"></div>
+
+            <div class="px-5 py-3 bg-stone-50 border-t border-stone-100 flex gap-2">
+                <input type="text" id="coupon-input" placeholder="Código de cupón (ej. NIKOFIRST)" class="flex-1 px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs uppercase focus:outline-none focus:ring-2 focus:ring-rose-500">
+                <button onclick="applyCoupon()" class="bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors">
+                    Aplicar
+                </button>
+            </div>
+
+            <div class="p-5 border-t border-stone-100 bg-stone-50 space-y-3">
+                <div class="space-y-1.5 text-xs">
+                    <div class="flex justify-between text-stone-600">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal">$0.00</span>
+                    </div>
+                    <div id="coupon-discount-row" class="hidden flex justify-between text-emerald-600 font-bold">
+                        <span>Descuento Cupón (10%):</span>
+                        <span id="cart-discount">-$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-stone-600">
+                        <span>Servicio / Envío:</span>
+                        <span id="cart-shipping-fee">$600.00</span>
+                    </div>
+                    <div class="flex justify-between text-stone-900 font-extrabold text-base pt-2 border-t border-stone-200">
+                        <span>Total a Pagar:</span>
+                        <span id="cart-total" class="text-rose-600">$0.00</span>
+                    </div>
+                </div>
+
+                <button onclick="sendOrderToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg shadow-emerald-600/20 transition-all flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    Enviar Pedido por WhatsApp
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SECCIÓN EL SECRETO NIKO -->
+    <section id="secreto" class="py-20 bg-stone-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                
+                <div class="space-y-6">
+                    <span class="text-amber-400 font-bold uppercase tracking-widest text-xs">Tradición & Pasión</span>
+                    <h2 class="font-serif-title text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">El Secreto detrás de cada Bocado NIKO</h2>
+                    <p class="text-stone-300 text-sm sm:text-base leading-relaxed">
+                        En NIKO no tomamos atajos. Nuestra masa pasa por un proceso de maduración en frío de 48 horas con masa madre natural, logrando una textura ligera, digestiva y con bordes inflados y crocantes.
+                    </p>
+
+                    <div class="grid sm:grid-cols-2 gap-6 pt-2">
+                        <div class="bg-stone-800/80 p-5 rounded-2xl border border-stone-700">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl mb-3">
+                                <i class="fa-solid fa-wheat-awn"></i>
+                            </div>
+                            <h4 class="font-bold text-white text-base">Harina Tipo 00 Italiana</h4>
+                            <p class="text-xs text-stone-400 mt-1">Importada exclusivamente para garantizar elasticidad y sabor inigualable.</p>
+                        </div>
+
+                        <div class="bg-stone-800/80 p-5 rounded-2xl border border-stone-700">
+                            <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl mb-3">
+                                <i class="fa-solid fa-fire-flame-curved"></i>
+                            </div>
+                            <h4 class="font-bold text-white text-base">Horno de Barro 450°C</h4>
+                            <p class="text-xs text-stone-400 mt-1">Cocción en 90 segundos que conserva la frescura de los ingredientes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-serif-title text-2xl font-bold text-amber-400 mb-2">Lo que dicen nuestros comensales</h3>
+                    
+                    <div class="bg-stone-800/90 p-6 rounded-2xl border border-stone-700 shadow-xl space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-rose-600 text-white font-bold flex items-center justify-center text-sm">MC</div>
+                                <div>
+                                    <h5 class="font-bold text-white text-sm">Mariana Castro</h5>
+                                    <span class="text-stone-400 text-xs">Crítica Gastronómica</span>
+                                </div>
+                            </div>
+                            <div class="text-amber-400 text-xs">★★★★★</div>
+                        </div>
+                        <p class="text-stone-300 text-xs sm:text-sm italic">"La Pizza Burrata es simplemente celestial. La masa tiene esa ligereza perfecta y el ambiente del local te transporta directamente a Nápoles."</p>
+                    </div>
+
+                    <div class="bg-stone-800/90 p-6 rounded-2xl border border-stone-700 shadow-xl space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm">GR</div>
+                                <div>
+                                    <h5 class="font-bold text-white text-sm">Gonzalo Rossi</h5>
+                                    <span class="text-stone-400 text-xs">Cliente Frecuente</span>
+                                </div>
+                            </div>
+                            <div class="text-amber-400 text-xs">★★★★★</div>
+                        </div>
+                        <p class="text-stone-300 text-xs sm:text-sm italic">"Pedir por WhatsApp es súper rápido y las pastas llegan calientes como si estuvieras en el restaurante. ¡Un 10/10 indiscutible!"</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN RESERVAS -->
+    <section id="reservas" class="py-20 bg-stone-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto text-center space-y-3 mb-10">
+                <span class="text-rose-600 font-bold uppercase tracking-widest text-xs">Planifica tu visita</span>
+                <h2 class="font-serif-title text-3xl sm:text-4xl font-extrabold text-stone-900">Reserva tu Mesa en NIKO</h2>
+                <p class="text-stone-600 text-sm">Garantiza tu lugar en nuestro salón principal o área de terraza en segundos.</p>
+            </div>
+
+            <form id="reservation-form" onsubmit="handleReservationSubmit(event)" class="max-w-2xl mx-auto bg-white p-6 sm:p-10 rounded-3xl shadow-xl border border-stone-200/80 space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Nombre Completo *</label>
+                        <input type="text" id="res-name" required placeholder="Ej. Sofia Martínez" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-stone-900 focus:ring-2 focus:ring-rose-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Teléfono / WhatsApp *</label>
+                        <input type="tel" id="res-phone" required placeholder="+54 11 1234-5678" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-stone-900 focus:ring-2 focus:ring-rose-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Fecha *</label>
+                        <input type="date" id="res-date" required class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-stone-900 focus:ring-2 focus:ring-rose-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Hora *</label>
+                        <select id="res-time" required class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-stone-900 focus:ring-2 focus:ring-rose-500 focus:outline-none">
+                            <option value="12:30">12:30 PM (Almuerzo)</option>
+                            <option value="14:00">02:00 PM (Almuerzo)</option>
+                            <option value="20:30" selected>08:30 PM (Cena)</option>
+                            <option value="22:00">10:00 PM (Cena)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Comensales *</label>
+                        <select id="res-guests" required class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-stone-900 focus:ring-2 focus:ring-rose-500 focus:outline-none">
+                            <option value="2 Personas">2 Personas</option>
+                            <option value="4 Personas" selected>4 Personas</option>
+                            <option value="6 Personas">6 Personas</option>
+                            <option value="8+ Personas">8+ Personas (Grupo)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Preferencia de Ubicación o Notas</label>
+                    <textarea id="res-notes" rows="2" placeholder="Ej. Mesa en terraza, celebración de aniversario..." class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-stone-900 focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-rose-600 via-rose-700 to-amber-600 hover:from-rose-700 hover:to-amber-700 text-white font-extrabold py-4 rounded-xl shadow-lg shadow-rose-600/25 transition-all text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Confirmar Reserva Instantánea
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER Y CONTACTO -->
+    <section id="contacto" class="py-16 bg-stone-900 text-stone-300 border-b border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-pizza-slice"></i>
+                        </div>
+                        <span class="font-serif-title font-bold text-2xl text-white">NIKO</span>
+                    </div>
+                    <p class="text-xs text-stone-400 leading-relaxed">
+                        Pizzería & Trattoria de autor. Tradición italiana con la máxima calidad en ingredientes frescos.
+                    </p>
+                    <div class="flex items-center gap-3 pt-1">
+                        <a href="#" class="w-9 h-9 rounded-xl bg-stone-800 text-stone-300 hover:bg-rose-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-xl bg-stone-800 text-stone-300 hover:bg-rose-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://wa.me/541155559090" target="_blank" class="w-9 h-9 rounded-xl bg-stone-800 text-stone-300 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white text-sm mb-4">Ubicación & Mapa</h4>
+                    <p class="text-xs text-stone-400 mb-2"><i class="fa-solid fa-location-dot text-rose-500 mr-2"></i> Av. San Martín 1420, Ciudad Gourmet</p>
+                    <p class="text-xs text-stone-400 mb-4"><i class="fa-solid fa-square-parking text-amber-500 mr-2"></i> Estacionamiento propio gratuito</p>
+                    <a href="https://maps.google.com" target="_blank" class="inline-flex items-center gap-2 text-xs text-amber-400 hover:text-amber-300 font-bold underline">
+                        Ver en Google Maps <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white text-sm mb-4">Horarios de Atención</h4>
+                    <ul class="space-y-2 text-xs text-stone-400">
+                        <li class="flex justify-between"><span>Lunes:</span> <span class="text-stone-500">Cerrado</span></li>
+                        <li class="flex justify-between"><span>Martes - Jueves:</span> <span class="text-stone-300">12:00 PM - 23:30 PM</span></li>
+                        <li class="flex justify-between"><span>Viernes - Sábado:</span> <span class="text-stone-300">12:00 PM - 01:00 AM</span></li>
+                        <li class="flex justify-between"><span>Domingo:</span> <span class="text-stone-300">12:00 PM - 23:30 PM</span></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white text-sm mb-4">Novedades & Descuentos</h4>
+                    <p class="text-xs text-stone-400 mb-3">Suscríbete para recibir menús de temporada y promociones exclusivas.</p>
+                    <form onsubmit="handleNewsletterSubmit(event)" class="space-y-2">
+                        <input type="email" required placeholder="tu@email.com" class="w-full px-3 py-2 bg-stone-800 border border-stone-700 rounded-xl text-xs text-white focus:ring-2 focus:ring-rose-500 focus:outline-none">
+                        <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold py-2 rounded-xl transition-colors">
+                            Suscribirme
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-stone-950 text-stone-500 text-xs py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:flex sm:justify-between sm:items-center">
+            <p>© 2026 Restaurante NIKO. Todos los derechos reservados.</p>
+            <p class="mt-2 sm:mt-0">Diseñado para la mejor experiencia gastronómica.</p>
+        </div>
+    </footer>
+
+    <!-- LÓGICA DE INTERACCIÓN JAVASCRIPT -->
+    <script>
+        const DISHES_DATA = [
+            {
+                id: 1,
+                name: "Pizza Margherita D.O.P.",
+                category: "pizzas",
+                price: 14.50,
+                description: "Salsa de tomate San Marzano D.O.P., mozzarella fior di latte, albahaca fresca y aceite de oliva virgen extra.",
+                image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80",
+                badge: "Popular",
+                options: ["Borde Relleno de Mozzarella (+$2.00)", "Masa Tradicional", "Extra Albahaca"]
+            },
+            {
+                id: 2,
+                name: "Pizza Pepperoni & Miel Picante",
+                category: "pizzas",
+                price: 16.00,
+                description: "Pepperoni artesanal crocante, mozzarella, queso parmesano añejado y un toque de miel infusionada con ají picante.",
+                image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80",
+                badge: "Recomendado",
+                options: ["Sin Miel", "Doble Pepperoni (+$3.00)", "Masa Madre 48hs"]
+            },
+            {
+                id: 3,
+                name: "Pizza Cuatro Quesos Trufada",
+                category: "pizzas",
+                price: 17.50,
+                description: "Mozzarella, gorgonzola cremoso, fontina, provolone ahumado y aceite de trufa negra.",
+                image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
+                badge: "Artesanal",
+                options: ["Sin Gorgonzola", "Extra Aceite de Trufa", "Ajo Salteado"]
+            },
+            {
+                id: 4,
+                name: "Pizza Burrata & Jamón Crudo",
+                category: "pizzas",
+                price: 18.90,
+                description: "Burrata fresca de 125g colocada al salir del horno, prosciutto di Parma, rúcula fresca y tomates confitados.",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80",
+                badge: "Estrella NIKO",
+                options: ["Extra Burrata (+$4.00)", "Reducción de Aceto Balsámico"]
+            },
+            {
+                id: 5,
+                name: "Fettuccine Alfredo con Pollo",
+                category: "pastas",
+                price: 15.50,
+                description: "Pasta fresca hecha a mano diariamente en crema de queso parmesano Reggiano y pechuga de pollo a las finas hierbas.",
+                image: "https://images.unsplash.com/photo-1645112411341-6c4fd023714a?auto=format&fit=crop&w=600&q=80",
+                badge: "Pasta Fresca",
+                options: ["Queso Parmesano Extra", "Sin Pollo (Vegetariano)", "Pimiento Rojo"]
+            },
+            {
+                id: 6,
+                name: "Ravioli de Ricotta y Espinaca",
+                category: "pastas",
+                price: 16.80,
+                description: "Rellenos de ricotta artesanal y espinacas, servidos con manteca de salvia salteada y nueces tostadas.",
+                image: "https://images.unsplash.com/photo-1587740896339-96a761e0508d?auto=format&fit=crop&w=600&q=80",
+                badge: "Vegetariano",
+                options: ["Salsa de Tomate Filetto", "Extra Nueces"]
+            },
+            {
+                id: 7,
+                name: "Lasagna Bolognese Tradicional",
+                category: "pastas",
+                price: 17.00,
+                description: "Capas de pasta fresca, salsa ragú de carne de res cocinada a fuego lento durante 6 horas y bechamel gratinada.",
+                image: "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=600&q=80",
+                badge: "Clásico Italiano",
+                options: ["Extra Queso Gratinado"]
+            },
+            {
+                id: 8,
+                name: "Milanesa Napolitana NIKO",
+                category: "clasicos",
+                price: 16.50,
+                description: "Corte tierno empanado con hierbas, cubierto con jamón cocido, salsa de tomate de la casa y mozzarella gratinada.",
+                image: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=600&q=80",
+                badge: "Favorito",
+                options: ["Con Papas Fritas", "Con Puré de Papas", "Con Ensalada Mixta"]
+            },
+            {
+                id: 9,
+                name: "Provoleta Ahumada al Horno",
+                category: "clasicos",
+                price: 11.00,
+                description: "Queso provolone ahumado fundido al horno de barro con orégano fresco, ají molido y tomates cherry.",
+                image: "https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?auto=format&fit=crop&w=600&q=80",
+                badge: "Entrada",
+                options: ["Con Tostadas de Pan de Campo"]
+            },
+            {
+                id: 10,
+                name: "Tiramisú de la Nonna",
+                category: "postres",
+                price: 7.50,
+                description: "Receta familiar tradicional con queso mascarpone italiano, vainillas humedecidas en café espresso y cacao amargo.",
+                image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80",
+                badge: "Postre",
+                options: ["Extra Cacao"]
+            },
+            {
+                id: 11,
+                name: "Cannoli Siciliani (2 unidades)",
+                category: "postres",
+                price: 6.50,
+                description: "Masa crocante frita rellena de crema dulce de ricotta, gotas de chocolate negro y pistachos picados.",
+                image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
+                badge: "Tradicional",
+                options: ["Pistachos Extra"]
+            },
+            {
+                id: 12,
+                name: "Limonada Artesanal Menta y Jengibre",
+                category: "postres",
+                price: 4.50,
+                description: "Jugo de limones frescos exprimidos en el momento con hojas de menta y jengibre rallado.",
+                image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80",
+                badge: "Bebida",
+                options: ["Con Azúcar", "Endulzado con Stevia", "Sin Azúcar"]
+            }
+        ];
+
+        let cart = [];
+        let currentCategory = 'todos';
+        let searchQuery = '';
+        let selectedDish = null;
+        let selectedModalQty = 1;
+        let serviceType = 'delivery';
+        let appliedCouponDiscount = 0;
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColor = type === 'success' ? 'bg-stone-900 text-white border-rose-500' : 'bg-rose-600 text-white border-amber-300';
+            const icon = type === 'success' ? 'fa-circle-check text-rose-500' : 'fa-triangle-exclamation text-amber-300';
+
+            toast.className = `toast-animate-in pointer-events-auto flex items-center gap-3 px-4 py-3.5 rounded-2xl shadow-2xl border-l-4 ${bgColor} text-xs sm:text-sm font-medium`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-base"></i>
+                <span class="flex-1">${message}</span>
+                <button onclick="this.parentElement.remove()" class="opacity-70 hover:opacity-100 p-1"><i class="fa-solid fa-xmark"></i></button>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('toast-animate-in');
+                toast.classList.add('toast-animate-out');
+                setTimeout(() => toast.remove(), 250);
+            }, 3200);
+        }
+
+        function renderDishes() {
+            const grid = document.getElementById('dishes-grid');
+            grid.innerHTML = '';
+
+            const filtered = DISHES_DATA.filter(dish => {
+                const matchesCategory = currentCategory === 'todos' || dish.category === currentCategory;
+                const matchesSearch = dish.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      dish.description.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center text-stone-500">
+                        <i class="fa-solid fa-utensils text-4xl mb-3 text-stone-300"></i>
+                        <p class="font-bold text-stone-700">No encontramos ningún plato para tu búsqueda.</p>
+                        <button onclick="clearSearch()" class="mt-3 text-xs text-rose-600 font-bold underline">Limpiar filtros de búsqueda</button>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(dish => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-stone-200/80 transition-all duration-300 flex flex-col justify-between group";
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-52 overflow-hidden bg-stone-100 cursor-pointer" onclick="openCustomizeModal(${dish.id})">
+                            <img src="${dish.image}" alt="${dish.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/e11d48/ffffff?text=${encodeURIComponent(dish.name)}'">
+                            <span class="absolute top-3 left-3 bg-stone-900/85 backdrop-blur-md text-amber-400 text-[11px] font-bold px-3 py-1 rounded-xl shadow-md">
+                                ${dish.badge}
+                            </span>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="flex justify-between items-start gap-2 mb-2">
+                                <h3 class="font-serif-title font-bold text-lg text-stone-900 group-hover:text-rose-600 transition-colors cursor-pointer" onclick="openCustomizeModal(${dish.id})">${dish.name}</h3>
+                                <span class="font-bold text-rose-600 text-base whitespace-nowrap">$${dish.price.toFixed(2)}</span>
+                            </div>
+                            <p class="text-stone-500 text-xs line-clamp-2 leading-relaxed">${dish.description}</p>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6 pt-2 flex items-center justify-between gap-2 border-t border-stone-100">
+                        <button onclick="event.stopPropagation(); openCustomizeModal(${dish.id})" class="text-xs font-bold text-stone-600 hover:text-rose-600 underline underline-offset-4 py-2">
+                            Personalizar
+                        </button>
+
+                        <button onclick="event.stopPropagation(); addDirectToCart(${dish.id})" class="bg-stone-900 hover:bg-rose-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors shadow-sm flex items-center gap-1.5 active:scale-95">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                            <span>Agregar</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addDirectToCart(dishId) {
+            const dish = DISHES_DATA.find(d => d.id === dishId);
+            if (!dish) return;
+
+            const existingIndex = cart.findIndex(item => item.id === dishId && (!item.selectedOptions || item.selectedOptions.length === 0) && !item.notes);
+
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += 1;
+            } else {
+                cart.push({
+                    id: dish.id,
+                    name: dish.name,
+                    price: dish.price,
+                    qty: 1,
+                    selectedOptions: [],
+                    notes: ''
+                });
+            }
+
+            updateCartUI();
+            showToast(`¡1x ${dish.name} añadido a tu pedido!`);
+        }
+
+        function openCustomizeModal(dishId) {
+            const dish = DISHES_DATA.find(d => d.id === dishId);
+            if (!dish) return;
+
+            selectedDish = dish;
+            selectedModalQty = 1;
+
+            document.getElementById('modal-dish-img').src = dish.image;
+            document.getElementById('modal-dish-title').innerText = dish.name;
+            document.getElementById('modal-dish-price').innerText = `$${dish.price.toFixed(2)}`;
+            document.getElementById('modal-dish-desc').innerText = dish.description;
+            document.getElementById('modal-dish-badge').innerHTML = `<span class="bg-rose-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">${dish.badge}</span>`;
+            document.getElementById('modal-dish-qty').innerText = '1';
+            document.getElementById('modal-dish-notes').value = '';
+
+            const optionsContainer = document.getElementById('modal-dish-options');
+            optionsContainer.innerHTML = '';
+
+            dish.options.forEach((opt) => {
+                const optDiv = document.createElement('label');
+                optDiv.className = "flex items-center gap-2.5 text-xs sm:text-sm text-stone-700 cursor-pointer p-2.5 rounded-xl hover:bg-stone-50 border border-stone-100 transition-colors";
+                optDiv.innerHTML = `
+                    <input type="checkbox" value="${opt}" class="modal-opt-checkbox w-4 h-4 text-rose-600 rounded focus:ring-rose-500">
+                    <span>${opt}</span>
+                `;
+                optionsContainer.appendChild(optDiv);
+            });
+
+            const modalBackdrop = document.getElementById('custom-modal-backdrop');
+            modalBackdrop.classList.remove('hidden', 'pointer-events-none', 'opacity-0');
+            modalBackdrop.classList.add('opacity-100', 'pointer-events-auto');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCustomizeModal() {
+            const modalBackdrop = document.getElementById('custom-modal-backdrop');
+            modalBackdrop.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                modalBackdrop.classList.add('hidden');
+                modalBackdrop.classList.remove('opacity-100', 'pointer-events-auto');
+                document.body.style.overflow = '';
+            }, 250);
+        }
+
+        function adjustModalQty(delta) {
+            selectedModalQty = Math.max(1, selectedModalQty + delta);
+            document.getElementById('modal-dish-qty').innerText = selectedModalQty;
+        }
+
+        function confirmCustomizeAdd() {
+            if (!selectedDish) return;
+
+            const checkboxes = document.querySelectorAll('.modal-opt-checkbox:checked');
+            const selectedOptions = Array.from(checkboxes).map(cb => cb.value);
+            const notes = document.getElementById('modal-dish-notes').value;
+
+            cart.push({
+                id: selectedDish.id,
+                name: selectedDish.name,
+                price: selectedDish.price,
+                qty: selectedModalQty,
+                selectedOptions: selectedOptions,
+                notes: notes
+            });
+
+            updateCartUI();
+            closeCustomizeModal();
+            showToast(`¡${selectedModalQty}x ${selectedDish.name} personalizado agregado!`);
+        }
+
+        function toggleCartDrawer(open) {
+            const drawer = document.getElementById('cart-drawer-backdrop');
+            const panel = document.getElementById('cart-drawer-panel');
+
+            if (open) {
+                drawer.classList.remove('hidden', 'pointer-events-none', 'opacity-0');
+                drawer.classList.add('opacity-100', 'pointer-events-auto');
+                panel.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                panel.classList.add('translate-x-full');
+                setTimeout(() => {
+                    drawer.classList.add('hidden');
+                    drawer.classList.remove('opacity-100', 'pointer-events-auto');
+                    document.body.style.overflow = '';
+                }, 250);
+            }
+        }
+
+        function setServiceType(type) {
+            serviceType = type;
+            const delBtn = document.getElementById('service-delivery-btn');
+            const pickBtn = document.getElementById('service-pickup-btn');
+
+            if (type === 'delivery') {
+                delBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-rose-600 text-white shadow-sm flex items-center justify-center gap-1.5";
+                pickBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white text-stone-700 hover:bg-stone-200 border border-stone-200 flex items-center justify-center gap-1.5";
+            } else {
+                pickBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-rose-600 text-white shadow-sm flex items-center justify-center gap-1.5";
+                delBtn.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white text-stone-700 hover:bg-stone-200 border border-stone-200 flex items-center justify-center gap-1.5";
+            }
+            updateCartUI();
+        }
+
+        function applyCoupon() {
+            const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+            if (code === 'NIKOFIRST') {
+                appliedCouponDiscount = 0.10;
+                showToast('¡Cupón NIKOFIRST aplicado (10% OFF)!');
+            } else if (code === '') {
+                appliedCouponDiscount = 0;
+            } else {
+                showToast('Código de cupón no válido.', 'error');
+                appliedCouponDiscount = 0;
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cart-badge').innerText = totalItems;
+            document.getElementById('cart-badge-mobile').innerText = totalItems;
+
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center text-stone-400 my-10">
+                        <i class="fa-solid fa-basket-shopping text-5xl mb-3 text-stone-300"></i>
+                        <p class="font-bold text-stone-600 text-sm">Tu pedido está vacío</p>
+                        <p class="text-xs text-stone-400 mt-1">Navega por nuestro menú y añade tus delicias favoritas.</p>
+                    </div>
+                `;
+                document.getElementById('cart-subtotal').innerText = '$0.00';
+                document.getElementById('cart-shipping-fee').innerText = '$0.00';
+                document.getElementById('cart-total').innerText = '$0.00';
+                document.getElementById('coupon-discount-row').classList.add('hidden');
+                return;
+            }
+
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+
+                const optsText = item.selectedOptions && item.selectedOptions.length > 0 
+                    ? `<p class="text-[11px] text-stone-500 font-medium">+ ${item.selectedOptions.join(', ')}</p>` 
+                    : '';
+                const notesText = item.notes ? `<p class="text-[10px] text-amber-700 italic">Nota: "${item.notes}"</p>` : '';
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "flex items-start justify-between gap-3 p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80";
+                itemDiv.innerHTML = `
+                    <div class="flex-1 space-y-1">
+                        <h4 class="font-bold text-stone-900 text-xs sm:text-sm">${item.name}</h4>
+                        ${optsText}
+                        ${notesText}
+                        <span class="text-rose-600 font-bold text-xs block">$${item.price.toFixed(2)} c/u</span>
+                    </div>
+
+                    <div class="flex flex-col items-end gap-2">
+                        <button onclick="removeItemFromCart(${index})" class="text-stone-400 hover:text-rose-600 text-xs">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                        <div class="flex items-center gap-1.5 bg-white border border-stone-200 rounded-lg p-1">
+                            <button onclick="updateCartItemQty(${index}, -1)" class="w-5 h-5 flex items-center justify-center font-bold text-stone-600 hover:bg-stone-100 rounded">-</button>
+                            <span class="text-xs font-bold text-stone-900 w-4 text-center">${item.qty}</span>
+                            <button onclick="updateCartItemQty(${index}, 1)" class="w-5 h-5 flex items-center justify-center font-bold text-stone-600 hover:bg-stone-100 rounded">+</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+
+            const discountVal = subtotal * appliedCouponDiscount;
+            const shippingFee = serviceType === 'delivery' ? 600 : 0;
+            const finalTotal = (subtotal - discountVal) + shippingFee;
+
+            document.getElementById('cart-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+            
+            if (appliedCouponDiscount > 0) {
+                document.getElementById('coupon-discount-row').classList.remove('hidden');
+                document.getElementById('cart-discount').innerText = `-$${discountVal.toFixed(2)}`;
+            } else {
+                document.getElementById('coupon-discount-row').classList.add('hidden');
+            }
+
+            document.getElementById('cart-shipping-fee').innerText = serviceType === 'delivery' ? '$600.00' : 'GRATIS';
+            document.getElementById('cart-total').innerText = `$${finalTotal.toFixed(2)}`;
+        }
+
+        function updateCartItemQty(index, delta) {
+            if (cart[index]) {
+                cart[index].qty += delta;
+                if (cart[index].qty <= 0) {
+                    cart.splice(index, 1);
+                }
+                updateCartUI();
+            }
+        }
+
+        function removeItemFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+            showToast("Ítem removido de tu pedido", "info");
+        }
+
+        function sendOrderToWhatsApp() {
+            if (cart.length === 0) {
+                showToast("Tu pedido está vacío.", "error");
+                return;
+            }
+
+            let msg = `*NUEVO PEDIDO - RESTAURANTE NIKO*\n\n`;
+            msg += `*Tipo de Servicio:* ${serviceType === 'delivery' ? 'Delivery a Domicilio' : 'Retiro en Local'}\n\n`;
+            msg += `*DESGLOSE DEL PEDIDO:*\n`;
+
+            let subtotal = 0;
+            cart.forEach((item, i) => {
+                const total = item.price * item.qty;
+                subtotal += total;
+                msg += `${i + 1}. ${item.qty}x *${item.name}* - $${total.toFixed(2)}\n`;
+                if (item.selectedOptions && item.selectedOptions.length > 0) {
+                    msg += `   └ Extras: ${item.selectedOptions.join(', ')}\n`;
+                }
+                if (item.notes) {
+                    msg += `   └ Nota: ${item.notes}\n`;
+                }
+            });
+
+            const discountVal = subtotal * appliedCouponDiscount;
+            const shippingFee = serviceType === 'delivery' ? 600 : 0;
+            const finalTotal = (subtotal - discountVal) + shippingFee;
+
+            msg += `\n*Subtotal:* $${subtotal.toFixed(2)}`;
+            if (appliedCouponDiscount > 0) {
+                msg += `\n*Descuento Cupón:* -$${discountVal.toFixed(2)}`;
+            }
+            msg += `\n*Envío:* ${serviceType === 'delivery' ? '$600.00' : 'Gratis'}`;
+            msg += `\n*TOTAL A PAGAR:* *$${finalTotal.toFixed(2)}*\n\n`;
+            msg += `_Por favor confirmarme el tiempo de entrega/preparación._`;
+
+            const encodedMsg = encodeURIComponent(msg);
+            window.open(`https://wa.me/541155559090?text=${encodedMsg}`, '_blank');
+        }
+
+        function toggleMobileMenu(open) {
+            const backdrop = document.getElementById('mobile-menu-backdrop');
+            const panel = document.getElementById('mobile-menu-panel');
+
+            if (open) {
+                backdrop.classList.remove('hidden', 'pointer-events-none', 'opacity-0');
+                backdrop.classList.add('opacity-100', 'pointer-events-auto');
+                panel.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
+            } else {
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+                panel.classList.add('translate-x-full');
+                setTimeout(() => {
+                    backdrop.classList.add('hidden');
+                    backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+                    document.body.style.overflow = '';
+                }, 250);
+            }
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.dataset.category === category) {
+                    btn.className = "category-btn active px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-rose-600 text-white shadow-md shadow-rose-600/20";
+                } else {
+                    btn.className = "category-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-white text-stone-700 hover:bg-stone-200/80 border border-stone-200/80";
+                }
+            });
+            renderDishes();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('menu-search-input').value;
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderDishes();
+        }
+
+        function clearSearch() {
+            document.getElementById('menu-search-input').value = '';
+            searchQuery = '';
+            document.getElementById('clear-search-btn').classList.add('hidden');
+            renderDishes();
+        }
+
+        function handleReservationSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('res-name').value;
+            const date = document.getElementById('res-date').value;
+            const time = document.getElementById('res-time').value;
+            const code = 'NIKO-' + Math.floor(1000 + Math.random() * 9000);
+
+            showToast(`¡Reserva #${code} para ${name} el ${date} a las ${time} hs confirmada!`);
+            e.target.reset();
+        }
+
+        function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            showToast('¡Gracias por suscribirte! Revisa tu email para tu regalo de bienvenida.');
+            e.target.reset();
+        }
+
+        window.onload = function() {
+            renderDishes();
+            updateCartUI();
+
+            const dateInput = document.getElementById('res-date');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.value = today;
+                dateInput.min = today;
+            }
+        };
+    </script>
+</body>
+</html>
